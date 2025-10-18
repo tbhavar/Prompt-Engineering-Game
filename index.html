@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Consultant's AI Prompting Toolkit: A Dynamic Guide</title>
+    <style>
+        /*
+        * Embedded CSS Styling to Mimic a Clean Jekyll Theme (e.g., Minima)
+        */
+        :root {
+            --color-text: #151515; /* Dark text */
+            --color-background: #ffffff;
+            --color-link: #2a7ae2; /* Blue links */
+            --color-primary: #0056b3; /* Professional Blue */
+            --color-accent: #f6f6f6; /* Light gray for blocks */
+            --border-radius: 4px;
+            --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        }
+
+        body {
+            font-family: var(--font-stack);
+            margin: 0;
+            padding: 20px;
+            background-color: #fcfcfc; /* Very light background */
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: var(--color-background);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Soft shadow */
+        }
+
+        h1 {
+            color: var(--color-primary);
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid var(--color-accent);
+            padding-bottom: 10px;
+            font-weight: 600;
+        }
+
+        h2 {
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            color: var(--color-text);
+            font-size: 1.2rem;
+            margin-top: 20px;
+            border-left: 3px solid var(--color-link);
+            padding-left: 10px;
+            font-weight: 500;
+        }
+
+        .layout-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 40px;
+            margin-top: 20px;
+        }
+
+        /* Guide Section Styling */
+        .guide-section {
+            padding-right: 20px;
+        }
+        .guide-section p {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        .guide-section strong {
+            color: var(--color-primary);
+        }
+
+        /* Generator Styling */
+        .generator-section label {
+            display: block;
+            margin-bottom: 8px;
+            cursor: pointer;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            transition: background-color 0.2s;
+        }
+
+        .generator-section label:hover {
+            background-color: var(--color-accent);
+        }
+
+        .generator-section input[type="radio"]:checked + span,
+        .generator-section input[type="checkbox"]:checked + span {
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #c0c0c0;
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        #promptOutput {
+            background-color: #f7f7f7;
+            border: 1px solid #c0c0c0;
+            min-height: 200px;
+            font-family: 'Consolas', 'Menlo', monospace;
+            white-space: pre-wrap;
+            margin-bottom: 15px;
+        }
+
+        .output-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .button {
+            background-color: var(--color-link);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .button:hover {
+            background-color: #1964c8; /* Darker blue */
+        }
+        
+        /* Disclaimer and Attribution Styles */
+        .footer-section {
+            margin-top: 40px;
+            padding: 20px;
+            background-color: var(--color-accent);
+            border-radius: var(--border-radius);
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .footer-section h3 {
+            border-left: none;
+            padding-left: 0;
+            color: var(--color-primary);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+        
+        .disclaimer p, .attribution p {
+            font-size: 0.85rem;
+            color: #555;
+        }
+        
+        .attribution strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .layout-grid {
+                grid-template-columns: 1fr;
+            }
+            .guide-section {
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+                padding-right: 0;
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>The Consultant's AI Prompting Toolkit: A Dynamic Guide</h1>
+
+        <div class="layout-grid">
+            
+            <div class="guide-section">
+                <h2>The P-O-C-E Framework for Precision Prompting</h2>
+                <p>Use this framework to generate highly focused and effective prompts for any AI model. **Clarity drives better results.**</p>
+
+                <h3>P: Persona/Role</h3>
+                <p>Define the **persona** or **expert role** the AI should adopt. This sets the context, tone, and knowledge base for the response.</p>
+
+                <h3>O: Objective/Task</h3>
+                <p>State the single, clear, and action-oriented **objective** using a strong verb. What do you need the AI to *do*?</p>
+
+                <h3>C: Context/Constraints</h3>
+                <p>Provide all necessary **context, rules, limits, and style instructions**. This is where you include regulatory requirements, word counts, or complexity levels.</p>
+
+                <h3>E: Example/Input</h3>
+                <p>(Optional) Offer **data, background information, or a specific example** the AI must work from. Paste text directly here rather than asking the AI to recall it.</p>
+            </div>
+
+            <div class="generator-section">
+                <h2>Interactive Prompt Generator</h2>
+                <p>Select the options below to build your custom prompt.</p>
+
+                <div class="form-group">
+                    <h3>1. Persona/Role (P)</h3>
+                    <label><input type="radio" name="persona" value="Act as a highly experienced Chartered Accountant with deep regulatory knowledge." onchange="generatePrompt()"> <span>Chartered Accountant</span></label>
+                    <label><input type="radio" name="persona" value="Act as a creative Marketing Strategist specializing in B2B services." onchange="generatePrompt()"> <span>Marketing Strategist</span></label>
+                    <label><input type="radio" name="persona" value="Act as an expert Financial Analyst with a focus on risk assessment." onchange="generatePrompt()"> <span>Financial Analyst</span></label>
+                    <label><input type="radio" name="persona" value="Act as an expert educator, capable of explaining complex topics simply." onchange="generatePrompt()"> <span>Expert Educator</span></label>
+                </div>
+
+                <div class="form-group">
+                    <h3>2. Core Objective (O)</h3>
+                    <select id="objective" onchange="generatePrompt()">
+                        <option value="">-- Select a primary action --</option>
+                        <option value="Draft a detailed, professional response covering the main points.">Draft a detailed response</option>
+                        <option value="Summarize the key findings from the input, focusing on implications.">Summarize key findings</option>
+                        <option value="Brainstorm 10 actionable ideas for a new initiative.">Brainstorm 10 ideas</option>
+                        <option value="Format the data provided into a concise, three-column markdown table.">Format data into a table</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <h3>3. Context & Constraints (C)</h3>
+                    <label><input type="checkbox" name="constraint" value="Strictly adhere to (Indian) Tax Law and recent amendments." onchange="generatePrompt()"> <span>Strictly adhere to (Indian) Tax Law</span></label>
+                    <label><input type="checkbox" name="constraint" value="Limit the entire response to a maximum of 300 words." onchange="generatePrompt()"> <span>Limit response to 300 words</span></label>
+                    <label><input type="checkbox" name="constraint" value="Explain the concepts simply (using a metaphor or analogy like Lego or a cake recipe)." onchange="generatePrompt()"> <span>Explain the concepts simply</span></label>
+                    <label><input type="checkbox" name="constraint" value="Use a formal, advisory, and strictly neutral tone." onchange="generatePrompt()"> <span>Use a formal, advisory tone</span></label>
+                </div>
+
+                <div class="form-group">
+                    <h3>4. Optional Input/Data (E)</h3>
+                    <textarea id="inputData" placeholder="Paste relevant data, brief, or example text here (e.g., a client email, a regulation text, a data list)." onkeyup="generatePrompt()"></textarea>
+                </div>
+            </div>
+        </div>
+        
+        <hr style="margin-top: 30px;">
+        <h2>Generated Draft Prompt</h2>
+        <textarea id="promptOutput" readonly placeholder="Your custom prompt will appear here as you make selections."></textarea>
+        
+        <div class="output-controls">
+            <button class="button" onclick="copyPrompt()">Copy Prompt</button>
+        </div>
+        
+        <div class="footer-section">
+            <div class="disclaimer">
+                <h3>Disclaimer</h3>
+                <p>This tool is provided for **informational and educational purposes only**. It is designed to offer a general estimation or guidance based on the inputs provided.</p>
+                <p>It does not constitute, and should not be relied upon as, **professional accounting, legal, tax, financial, or other advisory services**. The results are not a substitute for professional consultation with a qualified chartered accountant who can review your specific facts and circumstances.</p>
+                <p>No responsibility is accepted for any loss or damage arising from the use or reliance on the information provided by this tool. By using this tool, you acknowledge and agree to these terms.</p>
+            </div>
+            <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 15px 0;">
+            <div class="attribution">
+                <h3>Attribution and Connection</h3>
+                <p>Tool Created By:<br>
+                <strong>Tanmay Rajendra Bhavar, Chartered Accountant and Founder of TRB & Co.</strong></p>
+                <p>Let's Connect:<br>
+                For personalized professional advice regarding your business, tax planning, or consultancy needs, please connect with me directly on LinkedIn. We look forward to partnering with you.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /*
+        * Embedded JavaScript for Dynamic Prompt Generation
+        */
+        function generatePrompt() {
+            let promptParts = [];
+            let finalPrompt = "";
+
+            // 1. Persona (P)
+            const personaRadio = document.querySelector('input[name="persona"]:checked');
+            if (personaRadio) {
+                promptParts.push(personaRadio.value);
+            }
+
+            // 2. Objective (O)
+            const objectiveSelect = document.getElementById('objective');
+            if (objectiveSelect.value) {
+                promptParts.push("Your core task is to: " + objectiveSelect.value);
+            }
+
+            // 3. Context & Constraints (C)
+            const constraints = document.querySelectorAll('input[name="constraint"]:checked');
+            if (constraints.length > 0) {
+                let constraintList = "Constraints and style rules:\n";
+                constraints.forEach(checkbox => {
+                    constraintList += "- " + checkbox.value + "\n";
+                });
+                promptParts.push(constraintList.trim());
+            }
+
+            // 4. Input Data (E)
+            const inputData = document.getElementById('inputData').value.trim();
+            if (inputData.length > 0) {
+                // Use a standard delimiter to cleanly separate the instructions from the data
+                promptParts.push("The following is the specific input, brief, or data you must operate on. Do not start the task until you have processed this:\n---\n" + inputData + "\n---");
+            }
+            
+            // Assemble the final prompt, separated by double newlines for clarity
+            finalPrompt = promptParts.join("\n\n");
+
+            // Update the output textarea
+            const outputElement = document.getElementById('promptOutput');
+            outputElement.value = finalPrompt || "Your custom prompt will appear here as you make selections.";
+        }
+
+        function copyPrompt() {
+            const outputElement = document.getElementById('promptOutput');
+            
+            // Check if there is content to copy
+            if (outputElement.value && outputElement.value !== "Your custom prompt will appear here as you make selections.") {
+                outputElement.select();
+                outputElement.setSelectionRange(0, 99999); // For mobile devices
+
+                // Use the modern clipboard API if available
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(outputElement.value)
+                        .then(() => {
+                            alert("Prompt copied to clipboard successfully!");
+                        })
+                        .catch(err => {
+                            // Fallback to execCommand if clipboard API fails
+                            document.execCommand('copy');
+                            alert("Prompt copied to clipboard! (via fallback)");
+                        });
+                } else {
+                    // Fallback for older browsers
+                    document.execCommand('copy');
+                    alert("Prompt copied to clipboard! (via fallback)");
+                }
+            } else {
+                alert("Please make some selections to generate a prompt first.");
+            }
+        }
+
+        // Initialize the prompt on load
+        window.onload = generatePrompt; 
+    </script>
+</body>
+</html>
