@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Consultant's AI Prompting Toolkit: A Dynamic Guide V2</title>
+    <title>The Consultant's AI Prompting Toolkit: Dynamic V3</title>
     <style>
         /*
-        * Embedded CSS Styling to Mimic a Clean Jekyll Theme (V2)
+        * Embedded CSS Styling to Mimic a Clean Jekyll Theme (V3)
         */
         :root {
             --color-text: #151515;
@@ -176,7 +176,7 @@
             background-color: #5a6268;
         }
 
-        /* Toast Notification (New Feature) */
+        /* Toast Notification */
         #toastMessage {
             visibility: hidden;
             min-width: 250px;
@@ -200,7 +200,7 @@
             bottom: 50px;
         }
 
-        /* Selection Summary (New Change) */
+        /* Selection Summary */
         #selectionSummary {
             padding: 15px;
             margin-bottom: 20px;
@@ -265,9 +265,9 @@
 <body>
 
     <div class="container">
-        <h1>The Consultant's AI Prompting Toolkit: A Dynamic Guide</h1>
+        <h1>The Consultant's AI Prompting Toolkit: Dynamic Guide (V3)</h1>
         
-        <!-- Preset Controls (New Feature 1) -->
+        <!-- Preset Controls -->
         <h2>Prompt Preset Library</h2>
         <div class="preset-controls">
             <select id="presetSelector" onchange="loadPreset(this.value)">
@@ -293,60 +293,46 @@
             <!-- Interactive Prompt Generator -->
             <div class="generator-section">
                 <h2>Interactive Prompt Generator Controls</h2>
-                <button class="button secondary" style="margin-bottom: 20px;" onclick="resetGenerator()">Reset All Selections (New Change 2)</button>
+                <button class="button secondary" style="margin-bottom: 20px;" onclick="resetGenerator()">Reset All Selections</button>
 
                 <div class="form-group">
                     <h3>1. Persona/Role (P)</h3>
-                    <label><input type="radio" name="persona" value="Act as a highly experienced Chartered Accountant with deep regulatory knowledge." onchange="generatePrompt()"> <span>Chartered Accountant</span></label>
-                    <label><input type="radio" name="persona" value="Act as a creative Marketing Strategist specializing in B2B services." onchange="generatePrompt()"> <span>Marketing Strategist</span></label>
-                    <label><input type="radio" name="persona" value="Act as an expert Financial Analyst with a focus on risk assessment." onchange="generatePrompt()"> <span>Financial Analyst</span></label>
-                    <label><input type="radio" name="persona" value="Act as an expert educator, capable of explaining complex topics simply." onchange="generatePrompt()"> <span>Expert Educator</span></label>
+                    <p>Selecting a persona dynamically updates all other options for maximum relevance.</p>
+                    <label><input type="radio" name="persona" data-persona="Chartered Accountant" onchange="updateOptions('Chartered Accountant')" value="Act as a highly experienced Chartered Accountant with deep regulatory knowledge."> <span>Chartered Accountant</span></label>
+                    <label><input type="radio" name="persona" data-persona="Corporate Legal Counsel" onchange="updateOptions('Corporate Legal Counsel')" value="Act as a Corporate Legal Counsel specializing in risk mitigation and contract law."> <span>Corporate Legal Counsel (New)</span></label>
+                    <label><input type="radio" name="persona" data-persona="Data Science Analyst" onchange="updateOptions('Data Science Analyst')" value="Act as a seasoned Data Science Analyst fluent in Python, R, and statistical modeling."> <span>Data Science Analyst (New)</span></label>
+                    <label><input type="radio" name="persona" data-persona="Marketing Strategist" onchange="updateOptions('Marketing Strategist')" value="Act as a creative Marketing Strategist specializing in B2B services."> <span>Marketing Strategist</span></label>
+                    <label><input type="radio" name="persona" data-persona="Expert Educator" onchange="updateOptions('Expert Educator')" value="Act as an expert educator, capable of explaining complex topics simply using analogies."> <span>Expert Educator</span></label>
                 </div>
 
                 <div class="form-group">
                     <h3>2. Core Objective (O)</h3>
                     <select id="objective" onchange="generatePrompt()">
-                        <option value="">-- Select a primary action --</option>
-                        <option value="Draft a detailed, professional response covering the main points.">Draft a detailed response</option>
-                        <option value="Summarize the key findings from the input, focusing on implications.">Summarize key findings</option>
-                        <option value="Brainstorm 10 actionable ideas for a new initiative.">Brainstorm 10 ideas</option>
-                        <option value="Format the data provided into a concise, three-column markdown table.">Format data into a table</option>
+                        <option value="">-- Select a primary action (changes based on P) --</option>
+                        <!-- Options populated by JavaScript -->
                     </select>
                 </div>
                 
-                <!-- Advanced Tone/Style Selector (New Feature 5) -->
                 <div class="form-group">
                     <h3>3. Advanced Tone/Style (O/C)</h3>
-                    <fieldset>
-                        <legend>Select Output Style/Format</legend>
-                        <label><input type="radio" name="tone" value="Ensure the response is presented in an Advisory/Consultative tone." onchange="generatePrompt()"> <span>Advisory Tone</span></label>
-                        <label><input type="radio" name="tone" value="Use technical jargon and detailed terms suitable for experts." onchange="generatePrompt()"> <span>Technical/Jargon Heavy</span></label>
-                        <label><input type="radio" name="tone" value="Present the result as an Executive Summary, highlighting only 3 key takeaways." onchange="generatePrompt()"> <span>Executive Summary Style</span></label>
-                        <label><input type="radio" name="tone" value="Format the entire response as a structured Q&A session." onchange="generatePrompt()"> <span>Q&A Format</span></label>
+                    <fieldset id="toneOptions">
+                        <legend>Select Output Style/Format (changes based on P)</legend>
+                        <!-- Options populated by JavaScript -->
+                        <p style="color:#888; margin-top: 5px;">Select a Persona above to load specific Tone options.</p>
                     </fieldset>
-                </div>
-
-
-                <!-- Context & Constraints Grouping (New Change 3) -->
-                <div class="form-group">
-                    <h3>4. Context & Constraints (C)</h3>
-                    
-                    <fieldset>
-                        <legend>A. Legal & Compliance</legend>
-                        <label><input type="checkbox" name="constraint" value="Strictly adhere to (Indian) Tax Law and recent amendments." data-group="legal" onchange="generatePrompt()"> <span>Strictly adhere to (Indian) Tax Law</span></label>
-                        <label><input type="checkbox" name="constraint" value="Reference the relevant section numbers for all statutory citations." data-group="legal" onchange="generatePrompt()"> <span>Cite Statute Sections</span></label>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend>B. Formatting & Length</legend>
-                        <label><input type="checkbox" name="constraint" value="Limit the entire response to a maximum of 300 words." data-group="formatting" onchange="generatePrompt()"> <span>Limit response to 300 words</span></label>
-                        <label><input type="checkbox" name="constraint" value="The final output must be 5 clear bullet points." data-group="formatting" onchange="generatePrompt()"> <span>5 Clear Bullet Points</span></label>
-                    </fieldset>
-
                 </div>
 
                 <div class="form-group">
-                    <h3>5. External URL (E) (New Feature 4)</h3>
+                    <h3>4. Context & Constraints (C)</h3>
+                    <fieldset id="constraintOptions">
+                        <legend>Select Rules & Limits (changes based on P)</legend>
+                        <!-- Options populated by JavaScript -->
+                        <p style="color:#888; margin-top: 5px;">Select a Persona above to load specific Constraint options.</p>
+                    </fieldset>
+                </div>
+
+                <div class="form-group">
+                    <h3>5. External URL (E)</h3>
                     <input type="text" id="externalUrl" placeholder="Paste single URL (e.g., news article, notification) for AI to analyze." onkeyup="generatePrompt()">
                 </div>
                 
@@ -362,31 +348,26 @@
         <hr style="margin-top: 30px;">
         <h2>Generated Draft Prompt</h2>
         
-        <!-- Selection Summary (New Change 4) -->
-        <div id="selectionSummary">Please make selections above to see a quick summary.</div>
+        <div id="selectionSummary">Please select a **Persona** to begin configuring your prompt.</div>
 
         <textarea id="promptOutput" readonly placeholder="Your custom prompt will appear here as you make selections."></textarea>
         
         <div class="output-footer">
-            <!-- Character Counter (New Feature 2) -->
             <div id="charCount">0 characters</div>
             <div class="output-controls">
                 <button class="button" onclick="copyPrompt()">Copy Prompt</button>
-                <!-- Download Button (New Feature 3) -->
                 <button class="button secondary" onclick="downloadPrompt()">Download (.txt)</button>
             </div>
         </div>
         
-        <!-- Toast Notification Container (New Change 1) -->
+        <!-- Toast Notification Container -->
         <div id="toastMessage"></div>
 
         <!-- Disclaimer and Attribution Section -->
         <div class="footer-section">
             <div class="disclaimer">
                 <h3>Disclaimer</h3>
-                <p>This tool is provided for **informational and educational purposes only**. It is designed to offer a general estimation or guidance based on the inputs provided.</p>
-                <p>It does not constitute, and should not be relied upon as, **professional accounting, legal, tax, financial, or other advisory services**. The results are not a substitute for professional consultation with a qualified chartered accountant who can review your specific facts and circumstances.</p>
-                <p>No responsibility is accepted for any loss or damage arising from the use or reliance on the information provided by this tool. By using this tool, you acknowledge and agree to these terms.</p>
+                <p>This tool is provided for **informational and educational purposes only**. It does not constitute, and should not be relied upon as, **professional accounting, legal, tax, financial, or other advisory services**. No responsibility is accepted for any loss or damage arising from the use or reliance on the information provided by this tool. By using this tool, you acknowledge and agree to these terms.</p>
             </div>
             <hr style="border: 0; border-top: 1px solid #e0e0e0; margin: 15px 0;">
             <div class="attribution">
@@ -402,13 +383,148 @@
 
     <script>
         /*
-        * Embedded JavaScript for Dynamic Prompt Generation and Utility Features
+        * Embedded JavaScript for Dynamic Prompt Generation and Utility Features (V3)
         */
         const outputElement = document.getElementById('promptOutput');
         const inputDataElement = document.getElementById('inputData');
         const objectiveSelect = document.getElementById('objective');
         const presetSelector = document.getElementById('presetSelector');
+        const toneOptionsContainer = document.getElementById('toneOptions');
+        const constraintOptionsContainer = document.getElementById('constraintOptions');
 
+        // --- Dynamic Content Data Structure ---
+        const personaOptions = {
+            'Chartered Accountant': {
+                objectives: [
+                    { value: "Draft a comprehensive advisory memo analyzing the tax implications of the input data.", text: "Draft a Tax Memo/Advisory" },
+                    { value: "Summarize the key compliance requirements and risks from the attached audit report or regulation text.", text: "Summarize Audit & Compliance Report" },
+                    { value: "Calculate the estimated tax liability for the client described in the input data.", text: "Calculate Estimated Tax Liability" },
+                ],
+                constraints: [
+                    { value: "Strictly adhere to (Indian) Tax Law and recent amendments.", text: "Adhere to specific Tax Law" },
+                    { value: "Reference the relevant section numbers for all statutory citations.", text: "Cite Statute Sections" },
+                    { value: "Use only financial ratios provided in the input data for analysis.", text: "Use only Input Ratios" },
+                ],
+                tones: [
+                    { value: "Ensure the response is presented in a formal, Advisory/Consultative tone.", text: "Advisory Tone" },
+                    { value: "Use technical terminology appropriate for a regulatory filing.", text: "Regulatory/Technical Tone" },
+                    { value: "Simplify the explanation for a client with no financial background.", text: "Simplified Client-Ready Explanation" },
+                ]
+            },
+            'Corporate Legal Counsel': {
+                objectives: [
+                    { value: "Analyze the attached contract draft for liability exposure and recommend revisions in markdown format.", text: "Analyze Contract for Risk & Revisions" },
+                    { value: "Explain the legal standing of [topic] based on the input document to a non-legal executive.", text: "Explain Legal Standing (Executive)" },
+                    { value: "Outline the necessary steps for a new regulatory filing.", text: "Outline Regulatory Filing Steps" },
+                ],
+                constraints: [
+                    { value: "Identify and list all potential contractual ambiguity.", text: "List Ambiguities" },
+                    { value: "Limit the summary of findings to 3-5 bullet points.", text: "Limit to 5 Key Points" },
+                    { value: "Exclude all jargon and use plain English only.", text: "Use Plain English Only" },
+                ],
+                tones: [
+                    { value: "The tone must be cautious and risk-averse.", text: "Risk-Averse/Cautious Tone" },
+                    { value: "Use formal, academic language suitable for a legal brief.", text: "Legal Brief Style" },
+                ]
+            },
+            'Data Science Analyst': {
+                objectives: [
+                    { value: "Write a complete, executable Python script to clean and visualize the attached dataset.", text: "Write Python Script (Clean & Visualize)" },
+                    { value: "Draft a SQL query to extract [specific metric] from the provided database schema.", text: "Draft SQL Query" },
+                    { value: "Perform a statistical summary and outline 5 key data insights.", text: "Perform Statistical Summary" },
+                ],
+                constraints: [
+                    { value: "The entire response must be enclosed in a markdown code block.", text: "Output must be Code Block" },
+                    { value: "Ensure all Python code uses the Pandas library and is fully commented.", text: "Use Pandas and Comment Heavily" },
+                    { value: "Focus the analysis specifically on time-series trends.", text: "Focus on Time-Series Trends" },
+                ],
+                tones: [
+                    { value: "Use precise, technical language suitable for a peer review.", text: "Technical/Peer Review Tone" },
+                    { value: "Focus on clear, step-by-step methodology.", text: "Methodology-Focused Tone" },
+                ]
+            },
+            'Marketing Strategist': {
+                objectives: [
+                    { value: "Draft 5 LinkedIn posts based on the input brief, targeting CEOs.", text: "Draft LinkedIn Posts" },
+                    { value: "Develop a content strategy outline for the next quarter.", text: "Develop Content Strategy Outline" },
+                    { value: "Summarize a competitor's strategy and suggest 3 counter-moves.", text: "Summarize Competitor Strategy" },
+                ],
+                constraints: [
+                    { value: "Adopt a brand voice that is energetic, authoritative, and uses emojis.", text: "Energetic and Authoritative Brand Voice" },
+                    { value: "Ensure all posts are optimized for a 90-second read time.", text: "Optimize for Fast Reading" },
+                    { value: "The content must focus exclusively on B2B professional services.", text: "B2B Focus" },
+                ],
+                tones: [
+                    { value: "Use a motivational and persuasive tone.", text: "Persuasive/Motivational Tone" },
+                    { value: "Maintain a light, humorous, and conversational style.", text: "Light/Conversational Style" },
+                ]
+            },
+            'Expert Educator': {
+                objectives: [
+                    { value: "Explain the principle of [topic] to a fifth-grade student.", text: "Explain to a Fifth Grader" },
+                    { value: "Develop 10 multiple-choice questions on the attached document.", text: "Develop 10 Multiple-Choice Questions" },
+                    { value: "Create a metaphor or analogy to simplify the core concept of [topic].", text: "Create Simplifying Analogy" },
+                ],
+                constraints: [
+                    { value: "Ensure the explanation avoids jargon and complex sentences entirely.", text: "No Jargon, Simple Sentences" },
+                    { value: "Structure the output as a 4-part lesson plan.", text: "Structure as 4-Part Lesson Plan" },
+                    { value: "The tone must be encouraging and highly accessible.", text: "Encouraging and Accessible Tone" },
+                ],
+                tones: [
+                    { value: "Use a clear, structured, academic explanation.", text: "Structured Academic Tone" },
+                    { value: "Use an encouraging, supportive, and narrative style.", text: "Narrative/Supportive Tone" },
+                ]
+            },
+        };
+
+
+        // --- Dynamic Option Loader (New Core Function) ---
+        function updateOptions(persona) {
+            const opts = personaOptions[persona];
+            
+            // 1. Clear and Populate Objective Dropdown
+            objectiveSelect.innerHTML = `<option value="">-- Select a primary action for ${persona} --</option>`;
+            if (opts && opts.objectives) {
+                opts.objectives.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.value;
+                    option.textContent = item.text;
+                    objectiveSelect.appendChild(option);
+                });
+            }
+
+            // 2. Clear and Populate Tone Fieldset
+            toneOptionsContainer.innerHTML = `<legend>Select Output Style/Format</legend>`;
+            if (opts && opts.tones) {
+                opts.tones.forEach((item, index) => {
+                    const label = document.createElement('label');
+                    label.innerHTML = `<input type="radio" name="tone" value="${item.value}" onchange="generatePrompt()"> <span>${item.text}</span>`;
+                    toneOptionsContainer.appendChild(label);
+                });
+            } else {
+                toneOptionsContainer.innerHTML = `<p style="color:#888; margin-top: 5px;">No Tone options available for this persona.</p>`;
+            }
+
+            // 3. Clear and Populate Constraint Fieldset
+            constraintOptionsContainer.innerHTML = `<legend>Select Rules & Limits</legend>`;
+            if (opts && opts.constraints) {
+                 const fieldset = document.createElement('fieldset');
+                 fieldset.innerHTML = `<legend>Persona-Specific Constraints</legend>`;
+                 
+                 opts.constraints.forEach((item, index) => {
+                    const label = document.createElement('label');
+                    label.innerHTML = `<input type="checkbox" name="constraint" value="${item.value}" onchange="generatePrompt()"> <span>${item.text}</span>`;
+                    fieldset.appendChild(label);
+                });
+                constraintOptionsContainer.appendChild(fieldset);
+            } else {
+                constraintOptionsContainer.innerHTML = `<p style="color:#888; margin-top: 5px;">No Constraint options available for this persona.</p>`;
+            }
+
+            // Ensure the generator runs to update the summary and prompt output
+            generatePrompt();
+        }
+        
         // --- Core Prompt Generation Logic ---
         function generatePrompt() {
             let promptParts = [];
@@ -417,9 +533,11 @@
             
             // 1. Persona (P)
             const personaRadio = document.querySelector('input[name="persona"]:checked');
+            const currentPersonaKey = personaRadio ? personaRadio.getAttribute('data-persona') : null;
+            
             if (personaRadio) {
                 promptParts.push(personaRadio.value);
-                summaryParts.push(`P: ${personaRadio.nextElementSibling.textContent}`);
+                summaryParts.push(`P: ${currentPersonaKey}`);
             }
 
             // 2. Objective (O)
@@ -428,16 +546,16 @@
                 promptParts.push("Your core task is to: " + objectiveSelect.value);
                 summaryParts.push(`O: ${objectiveText}`);
                 
-                // New Change 5: Context-Sensitive Placeholder
-                if (objectiveText.includes("data") || objectiveText.includes("table")) {
-                    inputPlaceholderText = "Since your objective is formatting data, paste raw, comma-separated data or a structured list of items here.";
-                } else if (objectiveText.includes("Summarize")) {
-                    inputPlaceholderText = "Paste the document or long text you need the AI to summarize.";
+                // Context-Sensitive Placeholder Logic
+                if (objectiveText.includes("data") || objectiveText.includes("table") || objectiveText.includes("script")) {
+                    inputPlaceholderText = "Paste raw data, structured lists, or database schemas here.";
+                } else if (objectiveText.includes("Summarize") || objectiveText.includes("Analyze")) {
+                    inputPlaceholderText = "Paste the document, contract, or long text you need the AI to summarize/analyze.";
                 }
             }
             inputDataElement.placeholder = inputPlaceholderText;
 
-            // 3. Advanced Tone/Style (C) (New Feature 5)
+            // 3. Advanced Tone/Style (C)
             const toneRadio = document.querySelector('input[name="tone"]:checked');
             if (toneRadio) {
                 promptParts.push(toneRadio.value);
@@ -455,7 +573,7 @@
                 summaryParts.push(`C: ${constraints.length} Rule(s)`);
             }
             
-            // 5. External URL (E) (New Feature 4)
+            // 5. External URL (E)
             const externalUrl = document.getElementById('externalUrl').value.trim();
             if (externalUrl.length > 0) {
                 promptParts.push(`\n[EXTERNAL INPUT]\nAnalyze the content found at this URL: ${externalUrl}`);
@@ -465,7 +583,6 @@
             // 6. Input Data (E)
             const inputData = inputDataElement.value.trim();
             if (inputData.length > 0) {
-                // Use a standard delimiter to cleanly separate the instructions from the data
                 promptParts.push("The following is the specific input, brief, or data you must operate on. Do not start the task until you have processed this:\n---\n" + inputData + "\n---");
                 summaryParts.push(`E: Data Included`);
             }
@@ -476,17 +593,17 @@
             // Update Output
             outputElement.value = finalPrompt || "Your custom prompt will appear here as you make selections.";
             
-            // New Feature 2: Character Counter
+            // Character Counter
             document.getElementById('charCount').textContent = `${outputElement.value.length} characters`;
 
-            // New Change 4: Real-Time Selection Summary
-            const summaryText = summaryParts.length > 0 ? summaryParts.join(" | ") : "Please make selections above to see a quick summary.";
-            document.getElementById('selectionSummary').textContent = summaryText;
+            // Real-Time Selection Summary
+            const summaryElement = document.getElementById('selectionSummary');
+            const summaryText = summaryParts.length > 0 ? summaryParts.join(" | ") : "Please select a **Persona** to begin configuring your prompt.";
+            summaryElement.innerHTML = summaryText; // Use innerHTML to allow for bolding if needed
         }
 
         // --- Utility Functions ---
 
-        // New Change 1: Custom Toast Notification
         function showToast(message) {
             const toast = document.getElementById('toastMessage');
             toast.textContent = message;
@@ -496,7 +613,6 @@
             }, 3000);
         }
 
-        // Copy Prompt
         function copyPrompt() {
             if (outputElement.value && outputElement.value !== "Your custom prompt will appear here as you make selections.") {
                 outputElement.select();
@@ -506,7 +622,6 @@
                     document.execCommand('copy');
                     showToast("Prompt Copied to Clipboard!");
                 } catch (err) {
-                    // Fallback alert if execCommand fails
                     showToast("Could not copy prompt.");
                 }
 
@@ -515,23 +630,22 @@
             }
         }
         
-        // New Change 2: Reset All Button
         function resetGenerator() {
             // Reset radio buttons
             document.querySelectorAll('input[type="radio"]:checked').forEach(radio => radio.checked = false);
-            // Reset checkboxes
-            document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => checkbox.checked = false);
             // Reset select dropdown
             objectiveSelect.value = "";
             // Reset text areas/inputs
             inputDataElement.value = "";
             document.getElementById('externalUrl').value = "";
             
+            // Re-run update options to clear dynamically loaded content
+            updateOptions(null); 
+
             showToast("Generator settings cleared.");
-            generatePrompt(); // Regenerate empty prompt
+            generatePrompt();
         }
         
-        // New Feature 3: Download Prompt
         function downloadPrompt() {
             const promptContent = outputElement.value;
             if (!promptContent || promptContent === "Your custom prompt will appear here as you make selections.") {
@@ -554,9 +668,8 @@
             showToast(`Downloaded: ${filename}`);
         }
 
-        // --- Preset Library Functions (New Feature 1) ---
+        // --- Preset Library Functions ---
         
-        // Load presets from localStorage
         function getPresets() {
             try {
                 const presetsJson = localStorage.getItem('trb_prompt_presets');
@@ -567,7 +680,6 @@
             }
         }
 
-        // Save presets to localStorage
         function savePresets(presets) {
             try {
                 localStorage.setItem('trb_prompt_presets', JSON.stringify(presets));
@@ -576,7 +688,6 @@
             }
         }
 
-        // Render the preset selector dropdown
         function renderPresetSelector() {
             const presets = getPresets();
             presetSelector.innerHTML = '<option value="">-- Load a Saved Prompt Preset --</option>';
@@ -589,14 +700,14 @@
             }
         }
         
-        // Save the current prompt configuration
         function savePreset() {
             const presetName = prompt("Enter a name for this prompt preset (e.g., 'Tax Summary Request'):");
             if (!presetName) return;
 
             const presets = getPresets();
             const config = {
-                persona: document.querySelector('input[name="persona"]:checked')?.value || '',
+                personaKey: document.querySelector('input[name="persona"]:checked')?.getAttribute('data-persona') || '',
+                personaValue: document.querySelector('input[name="persona"]:checked')?.value || '',
                 objective: objectiveSelect.value || '',
                 tone: document.querySelector('input[name="tone"]:checked')?.value || '',
                 constraints: Array.from(document.querySelectorAll('input[name="constraint"]:checked')).map(cb => cb.value),
@@ -610,7 +721,6 @@
             showToast(`Preset "${presetName}" saved!`);
         }
         
-        // Load a selected preset
         function loadPreset(name) {
             if (!name) return;
 
@@ -618,30 +728,33 @@
             const config = presets[name];
 
             if (config) {
-                // Clear all current selections first
+                // 1. Reset everything
                 resetGenerator(); 
                 
-                // Apply configuration for Persona
-                const personaInput = document.querySelector(`input[name="persona"][value="${config.persona}"]`);
+                // 2. Apply Persona first, which dynamically loads other options
+                const personaInput = document.querySelector(`input[name="persona"][data-persona="${config.personaKey}"]`);
                 if (personaInput) {
                     personaInput.checked = true;
+                    // Crucial: Call updateOptions to load the correct dynamic fields
+                    updateOptions(config.personaKey); 
                 }
                 
-                // Apply configuration for Objective
+                // 3. Apply Objective (now that options are loaded)
                 objectiveSelect.value = config.objective;
                 
-                // Apply configuration for Tone
+                // 4. Apply Tone (now that options are loaded)
                 const toneInput = document.querySelector(`input[name="tone"][value="${config.tone}"]`);
                 if (toneInput) {
                     toneInput.checked = true;
                 }
 
-                // Apply constraints
+                // 5. Apply Constraints (now that options are loaded)
                 config.constraints.forEach(value => {
                     const cb = document.querySelector(`input[name="constraint"][value="${value}"]`);
-                    if (cb) cb.checked = true;
+                    if (cb) cb.checked = true; // Fix: use explicit check
                 });
 
+                // 6. Apply Text Inputs
                 document.getElementById('externalUrl').value = config.externalUrl;
                 inputDataElement.value = config.inputData;
 
@@ -650,7 +763,6 @@
             }
         }
         
-        // Delete the currently selected preset
         function deletePreset() {
             const name = presetSelector.value;
             if (!name) {
@@ -672,7 +784,15 @@
         // Initialization on Load
         window.onload = function() {
             renderPresetSelector(); // Load and display saved presets
-            generatePrompt(); // Generate initial empty prompt
+            
+            // Initial state: If no persona selected, clear options.
+            const initialPersona = document.querySelector('input[name="persona"]:checked');
+            if (initialPersona) {
+                 updateOptions(initialPersona.getAttribute('data-persona'));
+            } else {
+                 updateOptions(null);
+            }
+            generatePrompt(); 
         }; 
     </script>
 </body>
