@@ -5,13 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Prompt Generator</title>
     <style>
-        /* BASE STYLES */
+        /* BASE STYLES - Radiant Theme */
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #1f2833 0%, #111a22 100%);
-            color: #E5E9F0;
+            /* Lighter, Radiant Background */
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            color: #263238; /* Dark text for contrast */
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -19,16 +20,16 @@
             overflow-y: auto;
         }
 
-        /* GLASSMORHISM STYLES */
+        /* GLASSMORHISM STYLES - Brighter Glass */
         .glass-container {
-            background: rgba(255, 255, 255, 0.08); /* Transparent background */
-            backdrop-filter: blur(10px); /* Key Glass effect */
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Light border */
-            border-radius: 16px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4); /* Soft shadow */
-            padding: 30px;
-            max-width: 1300px; /* Increased width */
+            background: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+            backdrop-filter: blur(15px); /* Stronger blur for clarity */
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.7); /* Defined light border */
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); /* Soft shadow */
+            padding: 40px;
+            max-width: 1300px;
             width: 95%;
             display: flex;
             gap: 30px;
@@ -39,9 +40,9 @@
         h1 {
             width: 100%;
             text-align: center;
-            color: #66CCFF; /* Neon accent */
-            text-shadow: 0 0 10px rgba(102, 204, 255, 0.5);
-            margin-bottom: 20px;
+            color: #00bcd4; /* Vibrant Cyan accent */
+            text-shadow: 0 0 15px rgba(0, 188, 212, 0.5);
+            margin-bottom: 25px;
         }
 
         /* INPUT / OUTPUT LAYOUT */
@@ -54,89 +55,60 @@
             flex: 1.2;
         }
 
-        .input-area {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
         /* INPUT FIELD STYLES */
         label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #C8D0D9;
+            color: #37474f;
         }
 
         input[type="text"], input[type="number"], textarea, select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.2);
-            color: #E5E9F0;
-            font-size: 1em;
+            padding: 12px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.8); /* Lighter input background */
+            color: #263238;
             transition: border-color 0.3s, box-shadow 0.3s;
             box-sizing: border-box;
         }
 
         input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #66CCFF;
-            box-shadow: 0 0 8px rgba(102, 204, 255, 0.6);
-        }
-
-        textarea {
-            resize: vertical;
-            min-height: 100px;
+            border-color: #00bcd4; /* Focus accent */
+            box-shadow: 0 0 10px rgba(0, 188, 212, 0.6);
         }
 
         /* OUTPUT BOX STYLES */
         #generatedPrompt {
             width: 100%;
             height: 450px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.05); /* Very light dark background for code */
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
             padding: 15px;
-            color: #A3BE8C; /* Code-like green/light color */
+            color: #006064; /* Dark cyan for generated text */
             font-family: monospace;
             font-size: 0.95em;
             white-space: pre-wrap;
             overflow-y: auto;
             box-sizing: border-box;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         
-        /* SLIDER STYLES (Custom styling for a glass feel) */
+        /* SLIDER STYLES */
         input[type=range] {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.1);
         }
         input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 18px;
-            width: 18px;
-            border-radius: 50%;
-            background: #66CCFF;
-            cursor: pointer;
-            box-shadow: 0 0 5px rgba(102, 204, 255, 0.8);
+            background: #00bcd4;
+            box-shadow: 0 0 5px rgba(0, 188, 212, 0.8);
         }
 
-        /* BUTTONS & ACTIONS */
+        /* BUTTONS */
         .actions {
             display: flex;
             gap: 10px;
             margin-top: 20px;
             flex-wrap: wrap;
-        }
-        
-        .actions button:first-child { /* Primary Generate button */
-            background: #66CCFF;
-            color: #1f2833;
         }
         
         button {
@@ -147,49 +119,46 @@
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
-            background: rgba(255, 255, 255, 0.1);
-            color: #E5E9F0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            background: #00bcd4; /* Primary accent color */
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 188, 212, 0.4);
         }
 
         button:hover {
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 15px rgba(102, 204, 255, 0.3);
+            background: #4dd0e1;
+            box-shadow: 0 6px 15px rgba(0, 188, 212, 0.6);
         }
         
-        button:active {
-            transform: scale(0.98);
-        }
-
         /* ACCORDION STYLES */
         .accordion {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            margin-bottom: 15px;
             overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
         
         .accordion-header {
-            padding: 15px;
+            padding: 18px;
             cursor: pointer;
             font-weight: bold;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.05);
+            color: #004d40;
             transition: background 0.3s;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
         
         .accordion-header:hover {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.1);
         }
         
         .accordion-content {
             padding: 15px;
             display: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
             flex-direction: column;
             gap: 10px;
         }
@@ -200,49 +169,32 @@
         
         .accordion-header .icon {
             transition: transform 0.3s;
+            color: #00bcd4;
         }
         
         .accordion.open .accordion-header .icon {
             transform: rotate(90deg);
         }
 
-        /* CHECKBOX/TOGGLE STYLES */
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
         /* FOOTER AND DISCLAIMER */
         .footer {
             width: 100%;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
             font-size: 0.8em;
-            color: #99AAB5;
+            color: #546e7a;
             text-align: center;
         }
-        
-        /* COUNTER */
-        .counter-display {
-            margin-top: 10px;
-            font-size: 0.9em;
-            color: #C8D0D9;
-        }
 
-        /* MOBILE RESPONSIVENESS */
+        /* RESPONSIVENESS */
         @media (max-width: 900px) {
             .glass-container {
                 flex-direction: column;
-                gap: 20px;
                 padding: 20px;
             }
-            body {
-                padding: 10px;
-            }
             .output-area {
-                order: 1; /* Puts output above inputs on mobile */
+                order: 1; 
             }
             .input-area {
                 order: 2;
@@ -501,11 +453,6 @@
         <div class="footer">
             <p><strong>Disclaimer:</strong> This tool generates structured prompts based on user input. The effectiveness and safety of the generated prompt depend on the underlying AI model (LLM) and the context in which it is used. Always test prompts for desired behavior and adhere to the LLM provider's terms of service and safety policies.</p>
             <p><strong>License:</strong> This static webpage code is provided under the MIT License. Feel free to use, modify, and distribute.</p>
-            <p> <strong>Tool Created By:
-Tanmay Rajendra Bhavar, Chartered Accountant and Founder of TRB & Co.
-
-Let's Connect:
-For personalized professional advice regarding your business, tax planning, or consultancy needs, please connect with me directly on LinkedIn. We look forward to partnering with you. </strong> </p>
         </div>
     </div>
 
@@ -523,10 +470,17 @@ For personalized professional advice regarding your business, tax planning, or c
             const headers = document.querySelectorAll('.accordion-header');
             headers.forEach(header => {
                 header.addEventListener('click', () => {
-                    const accordion = header.parentElement;
-                    accordion.classList.toggle('open');
+                    const accordion = header.closest('.accordion'); // Find the closest parent with class .accordion
+                    if (accordion) {
+                        accordion.classList.toggle('open');
+                    }
                 });
             });
+        }
+
+        function updateRangeLabel(sliderId, labelId) {
+            document.getElementById(labelId).textContent = document.getElementById(sliderId).value;
+            generatePrompt();
         }
         
         function getControlValues() {
@@ -770,4 +724,3 @@ For personalized professional advice regarding your business, tax planning, or c
     </script>
 </body>
 </html>
-
