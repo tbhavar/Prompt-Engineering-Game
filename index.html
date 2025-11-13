@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glassmorphism Prompt Generator</title>
+    <title>AI Prompt Generator</title>
     <style>
         /* BASE STYLES */
         body {
@@ -28,12 +28,12 @@
             border-radius: 16px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4); /* Soft shadow */
             padding: 30px;
-            max-width: 1200px;
+            max-width: 1300px; /* Increased width */
             width: 95%;
             display: flex;
             gap: 30px;
             margin-top: 20px;
-            flex-wrap: wrap; /* Allows sections to wrap on smaller screens */
+            flex-wrap: wrap; 
         }
 
         h1 {
@@ -48,6 +48,10 @@
         .input-area, .output-area {
             flex: 1;
             min-width: 300px;
+        }
+        
+        .output-area {
+            flex: 1.2;
         }
 
         .input-area {
@@ -90,7 +94,7 @@
         /* OUTPUT BOX STYLES */
         #generatedPrompt {
             width: 100%;
-            height: 400px;
+            height: 450px;
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 8px;
@@ -122,37 +126,42 @@
             box-shadow: 0 0 5px rgba(102, 204, 255, 0.8);
         }
 
-        /* BUTTONS */
+        /* BUTTONS & ACTIONS */
         .actions {
             display: flex;
             gap: 10px;
             margin-top: 20px;
-            justify-content: center;
+            flex-wrap: wrap;
         }
-
+        
+        .actions button:first-child { /* Primary Generate button */
+            background: #66CCFF;
+            color: #1f2833;
+        }
+        
         button {
-            padding: 12px 25px;
+            padding: 10px 20px;
             border: none;
             border-radius: 8px;
-            font-size: 1em;
+            font-size: 0.9em;
             font-weight: bold;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
-            background: #66CCFF; /* Primary accent color */
-            color: #1f2833;
-            box-shadow: 0 4px 15px rgba(102, 204, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            color: #E5E9F0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         button:hover {
-            background: #90E0FF;
-            box-shadow: 0 6px 20px rgba(102, 204, 255, 0.6);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(102, 204, 255, 0.3);
         }
         
         button:active {
             transform: scale(0.98);
         }
-        
-        /* COLLAPSIBLE ACCORDION STYLES */
+
+        /* ACCORDION STYLES */
         .accordion {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 8px;
@@ -180,10 +189,13 @@
             padding: 15px;
             display: none;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        .accordion-content.active {
-            display: block;
+        .accordion.open .accordion-content {
+            display: flex;
         }
         
         .accordion-header .icon {
@@ -199,9 +211,26 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
         }
         
+        /* FOOTER AND DISCLAIMER */
+        .footer {
+            width: 100%;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8em;
+            color: #99AAB5;
+            text-align: center;
+        }
+        
+        /* COUNTER */
+        .counter-display {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #C8D0D9;
+        }
+
         /* MOBILE RESPONSIVENESS */
         @media (max-width: 900px) {
             .glass-container {
@@ -218,50 +247,97 @@
             .input-area {
                 order: 2;
             }
+            .actions button {
+                flex-grow: 1;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="glass-container">
-        <h1>✨ AI Prompt Generator (Glass UI)</h1>
-        
-        <div class="output-area">
-            <h2>Generated Prompt</h2>
-            <div id="generatedPrompt">Select inputs to generate the prompt...</div>
-            
-            <div class="actions">
-                <button onclick="generatePrompt()">Generate Prompt</button>
-                <button onclick="copyToClipboard()">Copy to Clipboard</button>
-            </div>
-        </div>
+        <h1>🛠️ AI Prompt Generator</h1>
         
         <div class="input-area">
             <h2>Configuration Inputs</h2>
             
             <div class="accordion open">
                 <div class="accordion-header">
-                    I. Core Task Definition (3) <span class="icon">▶</span>
+                    I. Core Task & Persona (1-5) <span class="icon">▶</span>
                 </div>
-                <div class="accordion-content active">
+                <div class="accordion-content">
                     <div class="control-group">
-                        <label for="primaryGoal">1. Primary Goal (e.g., "Write a blog post on Glassmorphism")</label>
-                        <input type="text" id="primaryGoal" oninput="generatePrompt()" placeholder="Required: What is the main task?" value="">
+                        <label for="systemPrompt">System Prompt Area (High-level, persistent instructions)</label>
+                        <textarea id="systemPrompt" oninput="generatePrompt()" placeholder="e.g., You are a helpful and concise assistant."></textarea>
                     </div>
                     <div class="control-group">
-                        <label for="modelPersona">3. Model Persona/Role (e.g., Chartered Accountant)</label>
-                        <input type="text" id="modelPersona" oninput="generatePrompt()" placeholder="The expert role the AI should adopt" value="Expert Prompt Writer">
+                        <label for="primaryGoal">1. Primary Goal</label>
+                        <input type="text" id="primaryGoal" oninput="generatePrompt()" placeholder="What is the main task?" value="">
                     </div>
                     <div class="control-group">
-                        <label for="inputContext">2. Input Data/Context (Optional source material)</label>
-                        <textarea id="inputContext" oninput="generatePrompt()" placeholder="Paste any data or background text here..."></textarea>
+                        <label for="modelPersona">3. Model Persona/Role</label>
+                        <input type="text" id="modelPersona" oninput="generatePrompt()" placeholder="e.g., Chartered Accountant" value="Expert Prompt Writer">
+                    </div>
+                    <div class="control-group">
+                        <label for="promptCategory">7. Prompt Category</label>
+                        <select id="promptCategory" onchange="generatePrompt()">
+                            <option value="">General</option>
+                            <option value="Coding">Coding</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Legal">Legal</option>
+                            <option value="Creative">Creative</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="modelSelection">8. Model Selection (Simulated)</label>
+                        <select id="modelSelection" onchange="generatePrompt()">
+                            <option value="">Default/General</option>
+                            <option value="Code/Technical">Code/Technical</option>
+                            <option value="Vision/Multimodal">Vision/Multimodal</option>
+                            <option value="Creative">Creative</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
             <div class="accordion">
                 <div class="accordion-header">
-                    II. Output Formatting (4) <span class="icon">▶</span>
+                    II. Context & Constraints (6-13) <span class="icon">▶</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="control-group">
+                        <label for="inputContext">2. Input Data/Context (Source material)</label>
+                        <textarea id="inputContext" oninput="generatePrompt()" placeholder="Paste any data or background text here..."></textarea>
+                    </div>
+                    <div class="control-group">
+                        <label for="fewShotExamples">13. Few-Shot Examples (Input/Output pairs)</label>
+                        <textarea id="fewShotExamples" oninput="generatePrompt()" placeholder="Input: [Example Input]\nOutput: [Example Output]"></textarea>
+                    </div>
+                     <div class="control-group">
+                        <label for="negativePrompting">Negative Prompting (What to AVOID writing about)</label>
+                        <textarea id="negativePrompting" oninput="generatePrompt()" placeholder="e.g., Do not mention politics or religion."></textarea>
+                    </div>
+                    <div class="control-group">
+                        <label for="forbiddenKeywords">10. Forbidden Keywords (Comma Separated)</label>
+                        <input type="text" id="forbiddenKeywords" oninput="generatePrompt()" placeholder="e.g., LLM, AI, prompt engineering">
+                    </div>
+                    <div class="control-group">
+                        <label for="variableInsertion">3. Variable Insertion (e.g., $COMPANY_NAME$=Acme Corp.)</label>
+                        <input type="text" id="variableInsertion" oninput="generatePrompt()" placeholder="$VAR_NAME$=value; $VAR2$=value2">
+                    </div>
+                    <div class="control-group">
+                        <label for="instructionType">13. Instruction Type</label>
+                        <select id="instructionType" onchange="generatePrompt()">
+                            <option value="Directive">Directive (Do This)</option>
+                            <option value="Query">Query (Answer This)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accordion">
+                <div class="accordion-header">
+                    III. Output & Behavior (14-22) <span class="icon">▶</span>
                 </div>
                 <div class="accordion-content">
                     <div class="control-group">
@@ -276,42 +352,102 @@
                         </select>
                     </div>
                     <div class="control-group">
-                        <label for="lengthConstraint">5. Length Constraint (e.g., 500 Words, 3 Paragraphs)</label>
+                        <label for="outputFormatVersion">15. Output Format Version (For schemas)</label>
+                        <input type="text" id="outputFormatVersion" oninput="generatePrompt()" placeholder="e.g., Schema V2.1">
+                    </div>
+                    <div class="control-group">
+                        <label for="lengthConstraint">5. Length Constraint</label>
                         <input type="text" id="lengthConstraint" oninput="generatePrompt()" placeholder="e.g., Max 500 Words">
                     </div>
                     <div class="control-group">
                         <label for="language">6. Language</label>
                         <input type="text" id="language" oninput="generatePrompt()" value="English" placeholder="e.g., Spanish, French">
                     </div>
+                    <div class="control-group">
+                        <label for="toneStyle">8. Tone/Style</label>
+                        <select id="toneStyle" onchange="generatePrompt()">
+                            <option value="Professional">Professional</option>
+                            <option value="Technical">Technical</option>
+                            <option value="Humorous">Humorous</option>
+                            <option value="Persuasive">Persuasive</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="targetAudience">9. Target Audience</label>
+                        <input type="text" id="targetAudience" oninput="generatePrompt()" placeholder="e.g., C-suite executives">
+                    </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="citationsRequired" onchange="generatePrompt()">
-                        <label for="citationsRequired">7. Citations Required</label>
+                        <input type="checkbox" id="outputConfidence" onchange="generatePrompt()">
+                        <label for="outputConfidence">14. Output Confidence Score (Request AI to rate its answer)</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion">
+                <div class="accordion-header">
+                    IV. Advanced Reasoning & Tools (23-28) <span class="icon">▶</span>
+                </div>
+                <div class="accordion-content">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="chainOfThought" onchange="generatePrompt()">
+                        <label for="chainOfThought">12. Chain-of-Thought (CoT)</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="breakdownTask" onchange="generatePrompt()">
+                        <label for="breakdownTask">15. Breakdown Task Steps (Outline plan first)</label>
+                    </div>
+                    <div class="control-group">
+                        <label for="iterativeRefinement">1. Iterative Refinement Count</label>
+                        <input type="number" id="iterativeRefinement" min="1" max="5" oninput="generatePrompt()" value="" placeholder="e.g., 2 (Refine 2 times)">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="selfCorrection" onchange="generatePrompt()">
+                        <label for="selfCorrection">14. Self-Correction/Reflection</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="toolSimulationToggle" onchange="generatePrompt()">
+                        <label for="toolSimulationToggle">20. Tool/Function Simulation</label>
+                        <input type="text" id="toolSimulationValue" oninput="generatePrompt()" placeholder="e.g., search" style="flex-grow: 1;">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="tempCycling" onchange="generatePrompt()">
+                        <label for="tempCycling">4. Temperature Cycling (Try low and high temp)</label>
                     </div>
                 </div>
             </div>
             
             <div class="accordion">
                 <div class="accordion-header">
-                    III. Behavioral Control (4) <span class="icon">▶</span>
+                    V. Safety & Mechanics (29-37) <span class="icon">▶</span>
                 </div>
                 <div class="accordion-content">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="safetyGuardrails" onchange="generatePrompt()">
+                        <label for="safetyGuardrails">9. Safety Guardrails (Adhere to ethical policies)</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="toxicityCheck" onchange="generatePrompt()">
+                        <label for="toxicityCheck">10. Toxicity Check (Simulated self-rating)</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="piiMasking" onchange="generatePrompt()">
+                        <label for="piiMasking">11. PII Masking Instruction</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="biasMitigation" onchange="generatePrompt()">
+                        <label for="biasMitigation">12. Bias Mitigation Instruction</label>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="citationsRequired" onchange="generatePrompt()">
+                        <label for="citationsRequired">7. Citations Required</label>
+                    </div>
                     <div class="control-group">
-                        <label for="toneStyle">8. Tone/Style</label>
-                        <select id="toneStyle" onchange="generatePrompt()">
-                            <option value="Professional">Professional</option>
-                            <option value="Humorous">Humorous</option>
-                            <option value="Technical">Technical</option>
-                            <option value="Persuasive">Persuasive</option>
-                            <option value="Casual">Casual</option>
+                        <label for="instructionWeight">19. Instruction Weight</label>
+                        <select id="instructionWeight" onchange="generatePrompt()">
+                            <option value="">None</option>
+                            <option value="ALL CAPS">ALL CAPS</option>
+                            <option value="Sandwich Technique">Sandwich Technique</option>
                         </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="targetAudience">9. Target Audience</label>
-                        <input type="text" id="targetAudience" oninput="generatePrompt()" placeholder="e.g., Non-technical audience">
-                    </div>
-                    <div class="control-group">
-                        <label for="forbiddenKeywords">10. Forbidden Keywords (Comma Separated)</label>
-                        <input type="text" id="forbiddenKeywords" oninput="generatePrompt()" placeholder="e.g., AI, LLM, prompt engineering">
                     </div>
                     <div class="checkbox-group">
                         <input type="checkbox" id="callToActionToggle" onchange="generatePrompt()">
@@ -320,34 +456,10 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="accordion">
                 <div class="accordion-header">
-                    IV. Advanced Techniques (4) <span class="icon">▶</span>
-                </div>
-                <div class="accordion-content">
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="chainOfThought" onchange="generatePrompt()">
-                        <label for="chainOfThought">12. Chain-of-Thought (CoT)</label>
-                    </div>
-                    <div class="control-group">
-                        <label for="fewShotExamples">13. Few-Shot Examples (Input/Output pairs)</label>
-                        <textarea id="fewShotExamples" oninput="generatePrompt()" placeholder="Input: [Example Input]\nOutput: [Example Output]"></textarea>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="selfCorrection" onchange="generatePrompt()">
-                        <label for="selfCorrection">14. Self-Correction/Reflection</label>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="breakdownTask" onchange="generatePrompt()">
-                        <label for="breakdownTask">15. Breakdown Task Steps</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="accordion">
-                <div class="accordion-header">
-                    V. Hyperparameters (Simulated) (3) <span class="icon">▶</span>
+                    VI. Hyperparameters & Mechanics (38-40) <span class="icon">▶</span>
                 </div>
                 <div class="accordion-content">
                     <div class="control-group">
@@ -365,31 +477,37 @@
                 </div>
             </div>
 
-            <div class="accordion">
-                <div class="accordion-header">
-                    VI. Prompt Mechanics (2) <span class="icon">▶</span>
-                </div>
-                <div class="accordion-content">
-                    <div class="control-group">
-                        <label for="instructionWeight">19. Instruction Weight</label>
-                        <select id="instructionWeight" onchange="generatePrompt()">
-                            <option value="">None</option>
-                            <option value="ALL CAPS">ALL CAPS</option>
-                            <option value="Sandwich Technique">Sandwich Technique (Repeat Goal at End)</option>
-                        </select>
-                    </div>
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="toolSimulationToggle" onchange="generatePrompt()">
-                        <label for="toolSimulationToggle">20. Tool/Function Simulation</label>
-                        <input type="text" id="toolSimulationValue" oninput="generatePrompt()" placeholder="e.g., search" style="flex-grow: 1;">
-                    </div>
-                </div>
+        </div>
+        
+        <div class="output-area">
+            <h2>Generated Prompt</h2>
+            <div id="generatedPrompt">Select inputs to generate the prompt...</div>
+            
+            <div class="counter-display">
+                Prompt Length: <strong id="wordCount">0</strong> words / <strong id="tokenCount">0</strong> tokens (approx.)
             </div>
 
+            <div class="actions">
+                <button onclick="generatePrompt()">Generate & Compile Prompt</button>
+                <button onclick="copyToClipboard()">Copy to Clipboard</button>
+                <button onclick="resetAllInputs()">17. Reset All Inputs</button>
+                <button onclick="showHistory()">19. Prompt History</button>
+                <button onclick="saveTemplate()">5. Save Template</button>
+                <button onclick="loadTemplate()">6. Load Template</button>
+                <button onclick="exportJSON()">20. Export JSON</button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>Disclaimer:</strong> This tool generates structured prompts based on user input. The effectiveness and safety of the generated prompt depend on the underlying AI model (LLM) and the context in which it is used. Always test prompts for desired behavior and adhere to the LLM provider's terms of service and safety policies.</p>
+            <p><strong>License:</strong> This static webpage code is provided under the MIT License. Feel free to use, modify, and distribute.</p>
         </div>
     </div>
 
     <script>
+        const HISTORY_KEY = 'promptHistory';
+        const TEMPLATE_KEY = 'promptTemplate';
+        
         document.addEventListener('DOMContentLoaded', () => {
             setupAccordions();
             // Initial generation of the prompt on load
@@ -401,124 +519,195 @@
             headers.forEach(header => {
                 header.addEventListener('click', () => {
                     const accordion = header.parentElement;
-                    const content = header.nextElementSibling;
-                    
                     accordion.classList.toggle('open');
-                    content.classList.toggle('active');
                 });
             });
         }
-
-        function updateRangeLabel(sliderId, labelId) {
-            document.getElementById(labelId).textContent = document.getElementById(sliderId).value;
+        
+        function getControlValues() {
+            const controls = document.querySelectorAll('input[type="text"], input[type="number"], textarea, select, input[type="range"]');
+            const values = {};
+            controls.forEach(control => {
+                values[control.id] = control.value;
+            });
+            
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(cb => {
+                values[cb.id] = cb.checked;
+            });
+            return values;
         }
 
         function generatePrompt() {
+            const values = getControlValues();
             let promptParts = [];
             
-            // 1. Get Values
-            const primaryGoal = document.getElementById('primaryGoal').value.trim();
-            const modelPersona = document.getElementById('modelPersona').value.trim();
-            const inputContext = document.getElementById('inputContext').value.trim();
-            const fewShotExamples = document.getElementById('fewShotExamples').value.trim();
+            // --- CORE LOGIC ---
             
-            // 2. Persona (Start of Prompt) (3)
-            if (modelPersona) {
-                promptParts.push(`ACT AS A ${modelPersona.toUpperCase()} EXPERT. `);
+            // 0. System Prompt (16. New Feature)
+            if (values.systemPrompt) {
+                 promptParts.push(`[SYSTEM PROMPT]: ${values.systemPrompt}\n\n`);
             }
-
-            // 3. Chain-of-Thought (CoT) (Prepended Reasoning) (12)
-            if (document.getElementById('chainOfThought').checked) {
+            
+            // 1. Model Persona (Start of Prompt) (3)
+            if (values.modelPersona) {
+                promptParts.push(`ACT AS A ${values.modelPersona.toUpperCase()} EXPERT. `);
+            }
+            
+            // 2. CoT and Advanced Reasoning (Prepended Reasoning) (12, 15)
+            if (values.chainOfThought) {
                 promptParts.push(`***IMPORTANT REASONING STEP: Before answering, output the phrase "Let's think step-by-step." followed by your thought process.***\n\n`);
             }
-            
-            // 4. Task Breakdown (15)
-            if (document.getElementById('breakdownTask').checked) {
+            if (values.breakdownTask) {
                 promptParts.push(`First, outline your plan for solving the task using a bulleted list.\n`);
             }
 
-            // 5. Instruction Weight (ALL CAPS) (19)
-            let formattedGoal = primaryGoal;
-            const instructionWeight = document.getElementById('instructionWeight').value;
-            if (instructionWeight === 'ALL CAPS' && primaryGoal) {
-                formattedGoal = primaryGoal.toUpperCase();
+            // 3. Instruction Weight (ALL CAPS) (19)
+            let formattedGoal = values.primaryGoal.trim();
+            if (values.instructionWeight === 'ALL CAPS' && values.primaryGoal) {
+                formattedGoal = values.primaryGoal.toUpperCase();
             }
 
-            // 6. Primary Goal (1)
-            if (primaryGoal) {
+            // 4. Primary Goal (1)
+            if (values.primaryGoal) {
                 promptParts.push(`[TASK]: ${formattedGoal}\n`);
             }
+            
+            // 5. Behavioral Controls & Constraints
+            if (values.promptCategory) { promptParts.push(`[CATEGORY]: ${values.promptCategory}.\n`); } // (7. New Feature)
+            if (values.instructionType === 'Query') { promptParts.push(`[INSTRUCTION TYPE]: Query (Requires a direct answer).\n`); } // (13. New Feature)
+            
+            if (values.outputFormat) { promptParts.push(`The final response MUST be formatted as ${values.outputFormat}.\n`); } // (4)
+            if (values.outputFormatVersion) { promptParts.push(`Use the format specification version: ${values.outputFormatVersion}.\n`); } // (15. New Feature)
+            if (values.lengthConstraint) { promptParts.push(`Strictly limit the response to a maximum of ${values.lengthConstraint}.\n`); } // (5)
+            if (values.language) { promptParts.push(`Generate the entire output in ${values.language}.\n`); } // (6)
+            if (values.toneStyle) { promptParts.push(`Adopt a ${values.toneStyle} tone and writing style.\n`); } // (8)
+            if (values.targetAudience) { promptParts.push(`Tailor the language and complexity for a ${values.targetAudience} audience.\n`); } // (9)
+            if (values.forbiddenKeywords) { promptParts.push(`DO NOT use the following terms: ${values.forbiddenKeywords}.\n`); } // (10)
+            if (values.negativePrompting) { promptParts.push(`[NEGATIVE CONSTRAINT]: ACT AS IF YOU HAVE NO KNOWLEDGE OF, AND AVOID WRITING ABOUT: ${values.negativePrompting}.\n`); } // (2. New Feature)
 
-            // 7. Behavioral Controls (In the middle) (4, 5, 6, 7, 8, 9, 10)
-            const outputFormat = document.getElementById('outputFormat').value;
-            if (outputFormat) {
-                promptParts.push(`The final response MUST be formatted as ${outputFormat}.\n`);
+            // 6. Context, Examples, Variables
+            if (values.inputContext) {
+                promptParts.push(`\n[CONTEXT]:\n---\n${values.inputContext}\n---\n`); // (2)
             }
-            const lengthConstraint = document.getElementById('lengthConstraint').value.trim();
-            if (lengthConstraint) {
-                promptParts.push(`Strictly limit the response to a maximum of ${lengthConstraint}.\n`);
+            if (values.fewShotExamples) {
+                promptParts.push(`\n[REFERENCE EXAMPLES]:\n---\n${values.fewShotExamples}\n---\n`); // (13)
             }
-            const language = document.getElementById('language').value.trim();
-            if (language) {
-                promptParts.push(`Generate the entire output in ${language}.\n`);
-            }
-            const toneStyle = document.getElementById('toneStyle').value;
-            if (toneStyle) {
-                promptParts.push(`Adopt a ${toneStyle} tone and writing style.\n`);
-            }
-            const targetAudience = document.getElementById('targetAudience').value.trim();
-            if (targetAudience) {
-                promptParts.push(`Tailor the language and complexity for a ${targetAudience} audience.\n`);
-            }
-            const forbiddenKeywords = document.getElementById('forbiddenKeywords').value.trim();
-            if (forbiddenKeywords) {
-                promptParts.push(`DO NOT use the following terms: ${forbiddenKeywords}.\n`);
+            if (values.variableInsertion) {
+                 promptParts.push(`\n[VARIABLE SUBSTITUTION]: Use these replacements throughout the response: ${values.variableInsertion}.`); // (3. New Feature)
             }
             
-            // 8. Context, Examples, Hyperparameters (Appended sections)
-            if (inputContext) {
-                promptParts.push(`\n[CONTEXT]:\n---\n${inputContext}\n---\n`);
+            // 7. Safety and Compliance
+            if (values.safetyGuardrails) { promptParts.push(`\n[SAFETY]: Strictly adhere to all ethical, legal, and usage guidelines.`); } // (9. New Feature)
+            if (values.biasMitigation) { promptParts.push(`\n[BIAS MITIGATION]: Ensure the response is neutral, balanced, and avoids any systemic bias.`); } // (12. New Feature)
+            if (values.piiMasking) { promptParts.push(`\n[PII RULE]: Redact or generalize all Personally Identifiable Information.`); } // (11. New Feature)
+            
+            // 8. Tool Use and Output Checks
+            if (values.toolSimulationToggle) {
+                const toolValue = values.toolSimulationValue || 'TOOL_NAME';
+                promptParts.push(`\n[TOOL USE]: If necessary, format a sub-query using the syntax: CALL_TOOL("${toolValue}", "query string here").`); // (20)
             }
-            if (fewShotExamples) {
-                promptParts.push(`\n[REFERENCE EXAMPLES]:\n---\n${fewShotExamples}\n---\n`);
-            }
-            if (document.getElementById('citationsRequired').checked) { // (7)
-                promptParts.push(`\nInclude direct, numbered citations for all factual claims.`);
-            }
+            if (values.citationsRequired) { promptParts.push(`\n[FACT CHECK]: Include direct, numbered citations for all factual claims.`); } // (7)
+            if (values.outputConfidence) { promptParts.push(`\n[CONFIDENCE RATING]: End your response by stating your confidence in the factual accuracy as a percentage (e.g., [CONFIDENCE: 95%]).`); } // (14. New Feature)
+            
+            // 9. Iteration and Refinement
+            if (values.iterativeRefinement) { promptParts.push(`\n[ITERATION]: After the first draft, refine the output ${values.iterativeRefinement} time(s) for clarity and completeness.`); } // (1. New Feature)
+            if (values.selfCorrection) { promptParts.push(`\nREVIEW: Analyze your final output for clarity and accuracy. If you find errors, self-correct and re-output the final answer.`); } // (14)
+            if (values.tempCycling) { promptParts.push(`\n[TEST]: Compare the output generated at Temperature 0.2 and 0.8 and provide the best result.`); } // (4. New Feature)
 
-            // 9. Hyperparameters (16, 17, 18)
-            const temperature = document.getElementById('temperature').value;
-            promptParts.push(`\n[HYPERPARAMETER]: Set internal temperature to ${temperature}.`);
-            const topP = document.getElementById('topP').value;
-            promptParts.push(`\n[HYPERPARAMETER]: Set internal Top P to ${topP}.`);
-            const maxTokens = document.getElementById('maxTokens').value.trim();
-            if (maxTokens) {
-                promptParts.push(`\n[TOKEN LIMIT]: Maximum tokens allowed: ${maxTokens}.`);
-            }
-
-            // 10. Advanced Techniques (14, 20)
-            if (document.getElementById('toolSimulationToggle').checked) {
-                const toolValue = document.getElementById('toolSimulationValue').value.trim() || 'TOOL_NAME';
-                promptParts.push(`\nIf necessary, format a sub-query using the syntax: CALL_TOOL("${toolValue}", "query string here").`);
-            }
-            if (document.getElementById('selfCorrection').checked) {
-                promptParts.push(`\nREVIEW: Analyze your final output for clarity and accuracy. If you find errors, self-correct and re-output the final answer.`);
+            // 10. Hyperparameters 
+            if (values.modelSelection) { promptParts.push(`\n[MODEL]: Simulate using a ${values.modelSelection} specialized model.`); } // (8. New Feature)
+            promptParts.push(`\n[HYPERPARAMETER]: Set internal temperature to ${values.temperature}.`); // (16)
+            promptParts.push(`\n[HYPERPARAMETER]: Set internal Top P to ${values.topP}.`); // (17)
+            if (values.maxTokens) {
+                promptParts.push(`\n[TOKEN LIMIT]: Maximum tokens allowed: ${values.maxTokens}.`); // (18)
             }
 
             // 11. Final Instructions (11, 19)
-            if (document.getElementById('callToActionToggle').checked) {
-                const callToActionValue = document.getElementById('callToActionValue').value.trim();
+            if (values.callToActionToggle) {
+                const callToActionValue = values.callToActionValue.trim();
                 if (callToActionValue) {
                     promptParts.push(`\nFINAL STEP: After the response, perform this action: ${callToActionValue}.`);
                 }
             }
-            if (instructionWeight === 'Sandwich Technique' && primaryGoal) {
-                promptParts.push(`\n\n***REPEAT TASK FOR EMPHASIS***: ${primaryGoal}`);
+            if (values.instructionWeight === 'Sandwich Technique' && values.primaryGoal) {
+                promptParts.push(`\n\n***REPEAT TASK FOR EMPHASIS***: ${values.primaryGoal}`);
             }
-
-            // 12. Display Final Prompt
+            
+            // --- OUTPUT ---
             const finalPrompt = promptParts.join('').trim();
             document.getElementById('generatedPrompt').textContent = finalPrompt || "Select inputs to generate the prompt...";
+            
+            // Update counts
+            updateCounts(finalPrompt);
+            
+            // Save to history on manual generate, or on a short delay for input fields
+            saveToHistory(finalPrompt);
+        }
+
+        function updateRangeLabel(sliderId, labelId) {
+            document.getElementById(labelId).textContent = document.getElementById(sliderId).value;
+            generatePrompt();
+        }
+        
+        // --- HISTORY AND TEMPLATING ---
+
+        function saveToHistory(prompt) {
+            if (prompt === "Select inputs to generate the prompt..." || prompt.length < 50) return;
+            let history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+            if (history[0] !== prompt) { // Avoid saving duplicates immediately
+                history.unshift(prompt);
+                if (history.length > 5) history.pop(); // Keep only the last 5
+                localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+            }
+        }
+        
+        function showHistory() {
+            const history = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+            let output = history.length === 0 ? "No prompts saved yet." : history.map((p, i) => 
+                `--- Prompt #${i + 1} (${p.length} chars) ---\n${p.substring(0, 150)}...\n`
+            ).join('\n\n');
+            
+            alert("Prompt History (Last 5):\n\n" + output);
+        }
+        
+        function saveTemplate() {
+            const values = getControlValues();
+            localStorage.setItem(TEMPLATE_KEY, JSON.stringify(values));
+            alert("Configuration saved as a template!");
+        }
+
+        function loadTemplate() {
+            const template = JSON.parse(localStorage.getItem(TEMPLATE_KEY));
+            if (!template) {
+                alert("No saved template found.");
+                return;
+            }
+            
+            for (const id in template) {
+                const element = document.getElementById(id);
+                if (element) {
+                    if (element.type === 'checkbox') {
+                        element.checked = template[id];
+                    } else if (element.type === 'range') {
+                        element.value = template[id];
+                        updateRangeLabel(id, `${id}Value`);
+                    } else {
+                        element.value = template[id];
+                    }
+                }
+            }
+            generatePrompt();
+            alert("Template loaded successfully!");
+        }
+
+        // --- UTILITY ---
+        
+        function updateCounts(prompt) {
+            const words = prompt.trim().split(/\s+/).filter(w => w.length > 0).length;
+            const tokens = Math.round(prompt.length / 4); // General approximation
+            document.getElementById('wordCount').textContent = words;
+            document.getElementById('tokenCount').textContent = tokens;
         }
 
         function copyToClipboard() {
@@ -529,6 +718,49 @@
                 console.error('Could not copy text: ', err);
                 alert('Failed to copy prompt.');
             });
+        }
+        
+        function resetAllInputs() {
+            const controls = document.querySelectorAll('input[type="text"], input[type="number"], textarea, select, input[type="range"], input[type="checkbox"]');
+            controls.forEach(control => {
+                if (control.type === 'checkbox') {
+                    control.checked = false;
+                } else if (control.type === 'range') {
+                    // Set sensible default ranges back
+                    if (control.id === 'temperature') control.value = 0.7;
+                    if (control.id === 'topP') control.value = 0.9;
+                    updateRangeLabel(control.id, `${control.id}Value`);
+                } else if (control.id === 'maxTokens') {
+                    control.value = 2048;
+                } else {
+                    control.value = '';
+                }
+            });
+            // Re-apply explicit text defaults
+            document.getElementById('modelPersona').value = 'Expert Prompt Writer';
+            document.getElementById('language').value = 'English';
+            
+            generatePrompt();
+            alert("All inputs reset to default settings.");
+        }
+        
+        function exportJSON() {
+            const config = getControlValues();
+            const prompt = document.getElementById('generatedPrompt').textContent;
+            
+            const exportData = {
+                generator_version: "1.2",
+                generated_prompt: prompt,
+                configuration: config
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "prompt_config_" + Date.now() + ".json");
+            document.body.appendChild(downloadAnchorNode); 
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
         }
     </script>
 </body>
